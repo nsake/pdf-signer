@@ -17,20 +17,7 @@ const firstPageFields = (doc: PDFDocument) => {
 	});
 };
 
-//*
-// computedStyle() {
-//                 const {x: e, y: t, w: i, h: a} = this.area;
-//                 return {
-//                     top: 100 * t + "%",
-//                     left: 100 * e + "%",
-//                     width: 100 * i + "%",
-//                     height: 100 * a + "%"
-//                 }
-//             }
-//
-
 const LoadPDF = () => {
-	const ref = useRef();
 	const [pdfDoc, setPDFDoc] = useState<PDFDocument>();
 	const [pdfInfo, setPdfInfo] = useState<string>();
 
@@ -102,14 +89,19 @@ const LoadPDF = () => {
 			newDiv.style.left = pdfToPixel(143);
 			newDiv.style.bottom = pdfToPixel(749);
 			newDiv.style.height = pdfToPixel(10);
-			newDiv.style.background = 'white';
+			newDiv.style.background = 'red';
 
 			ifExistsA4PageForDiv?.append(newDiv);
 		}
 
 		fields.forEach((field) => {
+			console.log(field);
+
 			const name = field.getName();
 			const widgets = field.acroField.getWidgets();
+
+			console.log(widgets);
+
 			const properties = widgets[0].getRectangle();
 
 			hashFields[name] = { field, properties };
