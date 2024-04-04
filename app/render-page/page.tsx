@@ -1,8 +1,23 @@
 'use client';
 
 import $api from '@/api';
+import {
+	pdfSizeToHtml,
+	pdfXCoordinatesToHtml,
+	pdfYCoordinatesToHtml
+} from '@/utils/pdfToPixel';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+interface IPropery {
+	y: number;
+	x: number;
+	width: number;
+	height: number;
+	borderWidth: number;
+	backgroundColor: any;
+	textColor: any;
+	borderColor: any;
+}
 
 interface IInstance {
 	_id: string;
@@ -10,7 +25,7 @@ interface IInstance {
 	documentUrl: string;
 	documentName: string;
 	pages: { fileName: string; url: string }[];
-	fields: Object[];
+	fields: { page: number; name: string; properties: IPropery }[];
 	createdAt: Date;
 }
 
@@ -19,13 +34,42 @@ const LoadPDF = () => {
 
 	useEffect(() => {
 		const getInstance = async () => {
-			const { data } = await $api.get('/docs/contract');
+			const { data } = (await $api.get('/docs/contract')) as {
+				data: IInstance;
+			};
 
 			setInstance(data);
 		};
 
 		getInstance();
 	}, []);
+
+	useEffect(() => {
+		if (instance) {
+			instance?.fields.map(({ page, name, properties }) => {
+				const container = document.getElementById(`instance-${page}`);
+				const divElement = document.createElement('div');
+
+				const isExistingDiv = document.getElementById(name);
+
+				if (container && !isExistingDiv) {
+					divElement.id = name;
+
+					divElement.style.position = 'absolute';
+
+					divElement.style.left = pdfXCoordinatesToHtml(properties.x);
+					divElement.style.bottom = pdfYCoordinatesToHtml(properties.y);
+
+					divElement.style.height = pdfSizeToHtml(properties.height);
+					divElement.style.width = pdfSizeToHtml(properties.width);
+
+					divElement.style.background = 'red';
+
+					container.append(divElement);
+				}
+			});
+		}
+	}, [instance]);
 
 	return (
 		<main
@@ -54,7 +98,7 @@ const LoadPDF = () => {
 					DocsSign SMT
 				</div>
 
-				{instance?.pages.map(({ fileName, url }) => (
+				{instance?.pages.map(({ fileName, url }, idx) => (
 					<div
 						key={url}
 						style={{
@@ -80,6 +124,7 @@ const LoadPDF = () => {
 						/>
 
 						<div
+							id={`instance-${idx + 1}`}
 							style={{
 								top: 0,
 								right: 0,
@@ -87,9 +132,7 @@ const LoadPDF = () => {
 								bottom: 0,
 								position: 'absolute'
 							}}
-						>
-							{' '}
-						</div>
+						></div>
 					</div>
 				))}
 			</div>
