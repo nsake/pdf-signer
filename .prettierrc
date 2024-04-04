@@ -1,0 +1,24 @@
+{
+	"trailingComma": "none",
+	"tabWidth": 2,
+	"printWidth": 80,
+	"useTabs": true,
+	"singleQuote": true,
+	"jsxSingleQuote": true,
+	"importOrder": [
+		"<THIRD_PARTY_MODULES>",
+		"^@/pages/(.*)$",
+		"^@/pages/components/(.*)$",
+		"^@/hooks/(.*)$",
+		"^@/shared/(.*)$",
+		"^@/services/(.*)$",
+		"^@/assets/(.*)$",
+		"^@/utils/(.*)$",
+		"^@/config/(.*)$",
+		"^@/providers/(.*)$",
+		"^../(.*)",
+		"^./(.*)"
+	],
+	"importOrderSeparation": true,
+	"importOrderSortSpecifiers": true
+}
