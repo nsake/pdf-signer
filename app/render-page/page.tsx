@@ -2,7 +2,8 @@
 
 import $api from '@/api';
 import {
-	pdfSizeToHtml,
+	pdfSizeToHtmlHeight,
+	pdfSizeToHtmlWidth,
 	pdfXCoordinatesToHtml,
 	pdfYCoordinatesToHtml
 } from '@/utils/pdfToPixel';
@@ -60,10 +61,10 @@ const LoadPDF = () => {
 					divElement.style.left = pdfXCoordinatesToHtml(properties.x);
 					divElement.style.bottom = pdfYCoordinatesToHtml(properties.y);
 
-					divElement.style.height = pdfSizeToHtml(properties.height);
-					divElement.style.width = pdfSizeToHtml(properties.width);
+					divElement.style.height = pdfSizeToHtmlHeight(properties.height);
+					divElement.style.width = pdfSizeToHtmlWidth(properties.width);
 
-					divElement.style.background = 'red';
+					divElement.className = 'input_field';
 
 					container.append(divElement);
 				}
@@ -87,16 +88,7 @@ const LoadPDF = () => {
 					paddingBottom: '18rem'
 				}}
 			>
-				<div
-					style={{
-						display: 'flex',
-						marginTop: '1rem',
-						alignItems: 'center',
-						justifyContent: 'center'
-					}}
-				>
-					DocsSign SMT
-				</div>
+				<h2 className='title'>Document Sign</h2>
 
 				{instance?.pages.map(({ fileName, url }, idx) => (
 					<div
